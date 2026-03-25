@@ -1,0 +1,21 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "กระปุกออมสิน Smart — Krungthai",
+  description: "กระปุกออมสิน Smart ที่เชื่อมกับแอปมือถือของกรุงไทย",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="th" className="h-full">
+      <body className="min-h-full flex flex-col bg-kt-bg antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}
