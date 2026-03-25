@@ -11,9 +11,9 @@
   --color-foreground: var(--foreground);
 
   /* Krungthai Brand Colors */
-  --color-kt-blue:        #1A56DB;
-  --color-kt-blue-dark:   #1346B8;
-  --color-kt-blue-light:  #EBF0FD;
+  --color-kt-blue:        #00A1E0;
+  --color-kt-blue-dark:   #0081B3;
+  --color-kt-blue-light:  #E0F5FC;
   --color-kt-gold:        #F59E0B;
   --color-kt-gold-dark:   #D97706;
   --color-kt-gold-light:  #FEF3C7;

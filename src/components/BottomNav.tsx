@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 const tabs = [
   { href: "/", label: "หน้าหลัก", icon: "🏠" },
   { href: "/stats", label: "สถิติ", icon: "📊" },
-  { href: "/rewards", label: "สิทธิ์", icon: "🎁" },
+  { href: "/rewards", label: "สอน", icon: "📚" },
   { href: "/invest", label: "ลงทุน", icon: "🏦" },
 ];
 

@@ -36,12 +36,22 @@ function fmt(n: number) {
 }
 
 function motivationalMsg(streak: number, userName: string) {
-  if (streak === 0) return `เริ่มออมวันนี้เลยนะ ${userName}! 🐷`;
+  if (streak === 0) return `เริ่มออมวันนี้เลยนะ ${userName}! 🐦`;
   if (streak < 7) return `เริ่มต้นดีมากเลย! ออมต่อเนื่องนะ 💪`;
   if (streak < 30) return `ออมมา ${streak} วันแล้ว! เก่งมาก 🔥`;
   if (streak < 90) return `ออมมา ${streak} วันแล้ว! คุณเป็นนักออมตัวยง 🏆`;
   return `ออมมา ${streak} วันแล้ว! คุณเป็นแรงบันดาลใจให้คนอื่น ✨`;
 }
+
+const MOTIVATION_QUOTES = [
+  { quote: "หยอดทีละน้อย ทำทุกวัน ดีกว่ารอโอกาสที่สมบูรณ์แบบ", icon: "🐦" },
+  { quote: "เงินที่ออมวันนี้ คือเสรีภาพของวันพรุ่งนี้", icon: "🏦" },
+  { quote: "ต้นไม้ใหญ่เริ่มจากเมล็ดเล็กๆ การออมก็เช่นกัน", icon: "🌿" },
+  { quote: "ทุกบาทที่ออม คือก้าวหนึ่งสู่ความมั่นคงทางการเงิน", icon: "💪" },
+  { quote: "วินัยในวันนี้ สร้างความสุขในวันหน้า", icon: "🎯" },
+  { quote: "นกกรุงไทยบินได้ไกล เพราะสะสมแรงทีละน้อยทุกวัน", icon: "🐦" },
+  { quote: "อย่าดูถูกเงินเหรียญเดียว หลายเหรียญรวมกัน คือความมั่งคั่ง", icon: "💎" },
+];
 
 // ─── Custom Tooltip ───────────────────────────────────────────────────────────
 function ChartTooltip({
@@ -209,12 +219,13 @@ export default function StatsPage() {
 
         {/* Motivational banner */}
         <motion.div
-          className="bg-kt-blue rounded-2xl px-5 py-3 mb-5 flex items-center gap-3"
+          className="rounded-2xl px-5 py-3 mb-5 flex items-center gap-3"
+          style={{ backgroundColor: "#FFC600" }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <span className="text-3xl">🎉</span>
-          <p className="text-white font-semibold text-sm leading-snug">
+          <span className="text-3xl">🎊</span>
+          <p className="text-gray-900 font-semibold text-sm leading-snug">
             {motivationalMsg(streak, userName)}
           </p>
         </motion.div>
@@ -313,159 +324,25 @@ export default function StatsPage() {
           </div>
         </div>
 
-        {/* Month comparison */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100 mb-4">
-          <p className="text-sm font-semibold text-gray-700 mb-4">เปรียบเทียบเดือนล่าสุด</p>
-          <div className="flex gap-4 items-end mb-3">
-            {/* Last month bar */}
-            <div className="flex-1 flex flex-col items-center gap-2">
-              <p className="text-sm font-bold text-gray-800">฿{fmt(stats.lastMonthTotal)}</p>
-              <div className="w-full bg-gray-100 rounded-xl overflow-hidden flex flex-col justify-end" style={{ height: 80 }}>
-                <motion.div
-                  className="w-full bg-gray-300 rounded-xl"
-                  style={{ alignSelf: "flex-end" }}
-                  initial={{ height: "0%" }}
-                  animate={{
-                    height: `${
-                      stats.lastMonthTotal > 0
-                        ? Math.round(
-                            (stats.lastMonthTotal /
-                              Math.max(stats.thisMonthTotal, stats.lastMonthTotal)) *
-                              100
-                          )
-                        : 0
-                    }%`,
-                  }}
-                  transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-                />
-              </div>
-              <p className="text-xs text-gray-500 text-center">{stats.lastMonthName}</p>
-            </div>
-
-            {/* Arrow + diff */}
-            <div className="flex flex-col items-center gap-1 pb-8">
-              {stats.monthDiff >= 0 ? (
-                <>
-                  <span className="text-2xl">📈</span>
-                  <span className="text-kt-green text-sm font-bold">
-                    +{stats.monthDiffPct ?? 0}%
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-2xl">📉</span>
-                  <span className="text-red-500 text-sm font-bold">
-                    {stats.monthDiffPct ?? 0}%
-                  </span>
-                </>
-              )}
-            </div>
-
-            {/* This month bar */}
-            <div className="flex-1 flex flex-col items-center gap-2">
-              <p className="text-sm font-bold text-kt-blue">฿{fmt(stats.thisMonthTotal)}</p>
-              <div className="w-full bg-kt-blue-light rounded-xl overflow-hidden flex flex-col justify-end" style={{ height: 80 }}>
-                <motion.div
-                  className="w-full bg-kt-blue rounded-xl"
-                  style={{ alignSelf: "flex-end" }}
-                  initial={{ height: "0%" }}
-                  animate={{
-                    height: `${
-                      stats.thisMonthTotal > 0
-                        ? Math.round(
-                            (stats.thisMonthTotal /
-                              Math.max(stats.thisMonthTotal, stats.lastMonthTotal)) *
-                              100
-                          )
-                        : 0
-                    }%`,
-                  }}
-                  transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
-                />
-              </div>
-              <p className="text-xs text-kt-blue font-semibold text-center">
-                {stats.thisMonthName} (ปัจจุบัน)
+        {/* Motivation Quote */}
+        {(() => {
+          const q = MOTIVATION_QUOTES[streak % MOTIVATION_QUOTES.length];
+          return (
+            <motion.div
+              className="rounded-3xl p-6 shadow-md"
+              style={{ backgroundColor: "#FFC600" }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="text-5xl text-center mb-4">{q.icon}</div>
+              <p className="text-center text-lg font-bold leading-relaxed text-gray-900">
+                &ldquo;{q.quote}&rdquo;
               </p>
-            </div>
-          </div>
-
-          {stats.monthDiff !== 0 && (
-            <p className="text-xs text-center text-gray-500 bg-gray-50 rounded-xl py-2 px-3">
-              {stats.monthDiff >= 0
-                ? `ออมเพิ่มขึ้น ฿${fmt(Math.abs(stats.monthDiff))} จาก${stats.lastMonthName} 🎉`
-                : `ออมลดลง ฿${fmt(Math.abs(stats.monthDiff))} จาก${stats.lastMonthName}`}
-            </p>
-          )}
-        </div>
-
-        {/* Streak card */}
-        <div className="bg-gradient-to-r from-orange-400 to-red-400 rounded-3xl p-5 text-white mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-5xl">🔥</span>
-            <div>
-              <p className="text-4xl font-extrabold">{streak} วัน</p>
-              <p className="text-white/80 text-sm">ออมต่อเนื่องไม่ขาด</p>
-            </div>
-          </div>
-          <div className="mt-4 flex gap-2 flex-wrap">
-            {[7, 30, 60, 90, 180].map((milestone) => (
-              <div
-                key={milestone}
-                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold ${
-                  streak >= milestone
-                    ? "bg-white text-orange-500"
-                    : "bg-white/20 text-white/60"
-                }`}
-              >
-                {streak >= milestone ? "✓" : "○"} {milestone} วัน
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Daily breakdown — last 7 days list */}
-        <div className="bg-white rounded-3xl p-5 shadow-sm border border-gray-100">
-          <p className="text-sm font-semibold text-gray-700 mb-3">7 วันล่าสุด</p>
-          <div className="flex flex-col gap-2">
-            {dailyData.slice(-7).reverse().map((day) => {
-              const d = new Date(day.key);
-              const isToday = day.isToday;
-              return (
-                <div key={day.key} className="flex items-center gap-3">
-                  <div
-                    className={`w-9 h-9 rounded-xl flex flex-col items-center justify-center flex-shrink-0 text-center ${
-                      isToday ? "bg-kt-blue text-white" : "bg-gray-100"
-                    }`}
-                  >
-                    <span className={`text-xs font-bold leading-none ${isToday ? "text-white" : "text-gray-700"}`}>
-                      {d.getDate()}
-                    </span>
-                    <span className={`text-xs leading-none ${isToday ? "text-white/70" : "text-gray-400"}`}>
-                      {THAI_MONTHS[d.getMonth()]}
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                      <motion.div
-                        className={`h-full rounded-full ${day.amount > 0 ? "bg-kt-blue" : "bg-gray-200"}`}
-                        initial={{ width: 0 }}
-                        animate={{ width: day.amount > 0 ? `${(day.amount / stats.bestAmount) * 100}%` : "0%" }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      />
-                    </div>
-                  </div>
-                  <div className="text-right w-14 flex-shrink-0">
-                    {day.amount > 0 ? (
-                      <span className="text-sm font-bold text-gray-800">฿{day.amount}</span>
-                    ) : (
-                      <span className="text-xs text-gray-400">ยังไม่ออม</span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+              <p className="text-center text-gray-700/60 text-xs mt-4">— กรุงไทย Smart Piggy Bank</p>
+            </motion.div>
+          );
+        })()}
       </main>
 
       <BottomNav />
