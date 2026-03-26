@@ -160,11 +160,10 @@ function AdminPanel({ onClose }: { onClose: () => void }) {
                   loadScenario(s);
                   onClose();
                 }}
-                className={`py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                  s === "P"
-                    ? "bg-kt-blue text-white hover:bg-kt-blue-dark"
-                    : "bg-kt-blue-light text-kt-blue hover:bg-kt-blue hover:text-white"
-                }`}
+                className={`py-2.5 rounded-xl text-sm font-semibold transition-colors ${s === "P"
+                  ? "bg-kt-blue text-white hover:bg-kt-blue-dark"
+                  : "bg-kt-blue-light text-kt-blue hover:bg-kt-blue hover:text-white"
+                  }`}
               >
                 {s === "P" ? "พี่แม็ค" : `Scenario ${s}`}
               </button>
@@ -254,37 +253,37 @@ function BlueBirdMascot() {
   return (
     <svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
       {/* Body */}
-      <ellipse cx="72" cy="100" rx="44" ry="34" fill="#00A1E0"/>
+      <ellipse cx="72" cy="100" rx="44" ry="34" fill="#00A1E0" />
       {/* Wing left */}
-      <ellipse cx="34" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(-15 34 102)"/>
+      <ellipse cx="34" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(-15 34 102)" />
       {/* Wing right */}
-      <ellipse cx="110" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(15 110 102)"/>
+      <ellipse cx="110" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(15 110 102)" />
       {/* Tail */}
-      <path d="M52 126 Q60 140 72 133 Q84 140 92 126 L80 118 L72 122 L64 118 Z" fill="#0081B3"/>
+      <path d="M52 126 Q60 140 72 133 Q84 140 92 126 L80 118 L72 122 L64 118 Z" fill="#0081B3" />
       {/* Head */}
-      <circle cx="72" cy="56" r="30" fill="#00A1E0"/>
+      <circle cx="72" cy="56" r="30" fill="#00A1E0" />
       {/* Crest feathers */}
-      <path d="M62 28 Q66 16 72 24 Q78 14 82 22 Q79 30 72 28 Q65 30 62 28Z" fill="#0081B3"/>
+      <path d="M62 28 Q66 16 72 24 Q78 14 82 22 Q79 30 72 28 Q65 30 62 28Z" fill="#0081B3" />
       {/* Eye left */}
-      <circle cx="60" cy="50" r="9" fill="white"/>
-      <circle cx="62" cy="50" r="6" fill="#1565C0"/>
-      <circle cx="64" cy="48" r="2.5" fill="white"/>
+      <circle cx="60" cy="50" r="9" fill="white" />
+      <circle cx="62" cy="50" r="6" fill="#1565C0" />
+      <circle cx="64" cy="48" r="2.5" fill="white" />
       {/* Eye right */}
-      <circle cx="84" cy="50" r="9" fill="white"/>
-      <circle cx="86" cy="50" r="6" fill="#1565C0"/>
-      <circle cx="88" cy="48" r="2.5" fill="white"/>
+      <circle cx="84" cy="50" r="9" fill="white" />
+      <circle cx="86" cy="50" r="6" fill="#1565C0" />
+      <circle cx="88" cy="48" r="2.5" fill="white" />
       {/* Beak */}
-      <path d="M68 63 L72 73 L76 63 Q72 58 68 63Z" fill="#F59E0B"/>
+      <path d="M68 63 L72 73 L76 63 Q72 58 68 63Z" fill="#F59E0B" />
       {/* Blush */}
-      <circle cx="51" cy="62" r="6" fill="#FF9BB0" opacity="0.45"/>
-      <circle cx="93" cy="62" r="6" fill="#FF9BB0" opacity="0.45"/>
+      <circle cx="51" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
+      <circle cx="93" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
       {/* Coin slot on belly */}
-      <rect x="58" y="95" width="28" height="5" rx="2.5" fill="#0081B3"/>
+      <rect x="58" y="95" width="28" height="5" rx="2.5" fill="#0081B3" />
       {/* Feet */}
-      <rect x="60" y="130" width="4" height="8" rx="2" fill="#F59E0B"/>
-      <rect x="51" y="135" width="16" height="3" rx="1.5" fill="#F59E0B"/>
-      <rect x="80" y="130" width="4" height="8" rx="2" fill="#F59E0B"/>
-      <rect x="71" y="135" width="16" height="3" rx="1.5" fill="#F59E0B"/>
+      <rect x="60" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
+      <rect x="51" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
+      <rect x="80" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
+      <rect x="71" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
     </svg>
   );
 }
@@ -300,6 +299,7 @@ export default function Dashboard() {
     balance: number;
     depositAmount: number;
   } | null>(null);
+  const [showInvestAd, setShowInvestAd] = useState(true);
 
   // Hidden admin: tap KTB logo 5× quickly
   const tapCount = useRef(0);
@@ -400,8 +400,7 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full" />
-          <div className="absolute -bottom-12 -left-8 w-32 h-32 bg-white/10 rounded-full" />
+
 
           <p className="text-white/70 text-sm mb-1 relative">ยอดเงินในกระปุก</p>
           <motion.p
@@ -492,6 +491,72 @@ export default function Dashboard() {
             depositAmount={investSnippet.depositAmount}
             onClose={() => setInvestSnippet(null)}
           />
+        )}
+      </AnimatePresence>
+
+      {/* ─── Investment Ad Popup ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {showInvestAd && (
+          <motion.div
+            className="fixed inset-0 z-[100] bg-black/50 flex items-center justify-center px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowInvestAd(false)}
+          >
+            <motion.div
+              className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 22, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setShowInvestAd(false)}
+                className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center text-white text-lg font-bold transition-colors"
+                aria-label="ปิดโฆษณา"
+              >
+                ✕
+              </button>
+
+              {/* Ad content */}
+              <div className="bg-gradient-to-br from-red-600 via-red-500 to-red-700 p-6 pt-5">
+                <div className="relative">
+                  <p className="text-3xl text-center mb-3">🚨🚨🚨</p>
+                  <h2 className="text-xl font-extrabold text-white text-center leading-snug mb-2">
+                    อย่าปล่อยเงินฝากนอนเฉยๆ!
+                  </h2>
+                  <p className="text-white/90 text-sm text-center leading-relaxed mb-4">
+                    🚨 เงินฝากของคุณสามารถ<span className="font-extrabold text-yellow-300">สร้างผลตอบแทน</span>ได้!<br />
+                    ลงทุนใน S&P500 ผลตอบแทนเฉลี่ย <span className="font-extrabold text-yellow-300">10% ต่อปี</span><br />
+                    เริ่มต้นได้ง่ายๆ กับกรุงไทย
+                  </p>
+
+                  {/* Projected returns example */}
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-3 mb-4">
+                    <p className="text-white/80 text-xs text-center mb-1">ตัวอย่าง: ฝาก ฿10,000 ลงทุน 1 ปี</p>
+                    <p className="text-center">
+                      <span className="text-2xl font-extrabold text-yellow-300">฿11,000</span>
+                      <span className="text-white/70 text-sm ml-1">กำไร +฿1,000</span>
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/invest"
+                    onClick={() => setShowInvestAd(false)}
+                    className="block w-full bg-yellow-400 hover:bg-yellow-300 text-red-700 font-extrabold py-3.5 rounded-xl text-center text-base transition-colors shadow-lg"
+                  >
+                    🚨 เริ่มลงทุนเลย!
+                  </Link>
+                  <p className="text-white/50 text-xs text-center mt-3">
+                    ⚠️ ผลตอบแทนในอดีตไม่รับประกันอนาคต
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 

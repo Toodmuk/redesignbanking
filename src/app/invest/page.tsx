@@ -1,129 +1,153 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import BottomNav from "@/components/BottomNav";
 import { usePiggyStore } from "@/store/piggyStore";
 
-const SP500_RATE = 0.10; // 10% per year historical average
-
-const TIME_OPTIONS = [
-  { label: "1 ปี", years: 1 },
-  { label: "3 ปี", years: 3 },
-  { label: "5 ปี", years: 5 },
+// ─── Asset allocation data ────────────────────────────────────────────────────
+const ASSETS = [
+  { label: "หุ้นไทย", pct: 30, color: "#00A1E0" },
+  { label: "หุ้นต่างประเทศ", pct: 25, color: "#1565C0" },
+  { label: "ตราสารหนี้", pct: 20, color: "#F59E0B" },
+  { label: "ทองคำ", pct: 15, color: "#EF4444" },
+  { label: "S&P500", pct: 10, color: "#10B981" },
 ];
 
-function formatBaht(n: number) {
-  return n.toLocaleString("th-TH", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+// ─── Donut Chart ──────────────────────────────────────────────────────────────
+function DonutChart({ amount }: { amount: number }) {
+  const size = 220;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 80;
+  const stroke = 32;
+  const circumference = 2 * Math.PI * r;
+
+  let offset = 0;
+  const slices = ASSETS.map((asset) => {
+    const dash = (asset.pct / 100) * circumference;
+    const gap = circumference - dash;
+    const slice = { ...asset, dash, gap, offset };
+    offset += dash;
+    return slice;
+  });
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative" style={{ width: size, height: size }}>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          {/* Background ring */}
+          <circle
+            cx={cx} cy={cy} r={r}
+            fill="none"
+            stroke="#E5E7EB"
+            strokeWidth={stroke}
+          />
+          {/* Slices */}
+          {slices.map((slice, i) => (
+            <motion.circle
+              key={i}
+              cx={cx} cy={cy} r={r}
+              fill="none"
+              stroke={slice.color}
+              strokeWidth={stroke}
+              strokeDasharray={`${slice.dash} ${slice.gap}`}
+              strokeDashoffset={-slice.offset}
+              strokeLinecap="butt"
+              transform={`rotate(-90 ${cx} ${cy})`}
+              initial={{ strokeDasharray: `0 ${circumference}` }}
+              animate={{ strokeDasharray: `${slice.dash} ${slice.gap}` }}
+              transition={{ duration: 0.8, delay: i * 0.12, ease: "easeOut" }}
+            />
+          ))}
+        </svg>
+        {/* Centre label */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <p className="text-xs text-gray-400 mb-0.5">ลงทุนแล้ว</p>
+          <p className="text-xl font-extrabold text-gray-800">
+            ฿{amount.toLocaleString("th-TH")}
+          </p>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="w-full mt-4 space-y-2 px-2">
+        {ASSETS.map((asset) => (
+          <div key={asset.label} className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span
+                className="w-3 h-3 rounded-full flex-shrink-0"
+                style={{ backgroundColor: asset.color }}
+              />
+              <span className="text-sm text-gray-600">{asset.label}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-800">
+                ฿{Math.round((asset.pct / 100) * amount).toLocaleString("th-TH")}
+              </span>
+              <span className="text-xs text-gray-400 w-8 text-right">{asset.pct}%</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-function calcReturn(principal: number, rate: number, years: number) {
-  const final = Math.round(principal * Math.pow(1 + rate, years));
-  const profit = final - principal;
-  const pct = ((profit / principal) * 100).toFixed(1);
-  return { final, profit, pct };
+// ─── Blue Bird Mascot ─────────────────────────────────────────────────────────
+function BlueBirdMascot() {
+  return (
+    <svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
+      <ellipse cx="72" cy="100" rx="44" ry="34" fill="#00A1E0" />
+      <ellipse cx="34" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(-15 34 102)" />
+      <ellipse cx="110" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(15 110 102)" />
+      <path d="M52 126 Q60 140 72 133 Q84 140 92 126 L80 118 L72 122 L64 118 Z" fill="#0081B3" />
+      <circle cx="72" cy="56" r="30" fill="#00A1E0" />
+      <path d="M62 28 Q66 16 72 24 Q78 14 82 22 Q79 30 72 28 Q65 30 62 28Z" fill="#0081B3" />
+      <circle cx="60" cy="50" r="9" fill="white" />
+      <circle cx="62" cy="50" r="6" fill="#1565C0" />
+      <circle cx="64" cy="48" r="2.5" fill="white" />
+      <circle cx="84" cy="50" r="9" fill="white" />
+      <circle cx="86" cy="50" r="6" fill="#1565C0" />
+      <circle cx="88" cy="48" r="2.5" fill="white" />
+      <path d="M68 63 L72 73 L76 63 Q72 58 68 63Z" fill="#F59E0B" />
+      <circle cx="51" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
+      <circle cx="93" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
+      <rect x="58" y="95" width="28" height="5" rx="2.5" fill="#0081B3" />
+      <rect x="60" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
+      <rect x="51" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
+      <rect x="80" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
+      <rect x="71" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
+    </svg>
+  );
 }
 
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function InvestPage() {
-  const { balance } = usePiggyStore();
+  const { balance, setBalance } = usePiggyStore();
+  const [invested, setInvested] = useState(false);
+  const [investAmount, setInvestAmount] = useState(0);
 
-  // Simulation state
-  const [principal, setPrincipal] = useState(balance || 7403);
-  const [timeIdx, setTimeIdx] = useState(0);
-  const years = TIME_OPTIONS[timeIdx].years;
-  const projected = calcReturn(principal, SP500_RATE, years);
-
-  // Current investment tracker
-  const [investedAmount, setInvestedAmount] = useState(0);
-  const [investedMonths, setInvestedMonths] = useState(12);
-  const monthlyRate = Math.pow(1 + SP500_RATE, 1 / 12) - 1;
-  const currentValue = Math.round(investedAmount * Math.pow(1 + monthlyRate, investedMonths));
-  const investedProfit = currentValue - investedAmount;
-  const profitPct = investedAmount > 0 ? ((investedProfit / investedAmount) * 100).toFixed(1) : "0.0";
-  const isProfit = investedProfit >= 0;
-  const fillPct = investedAmount > 0 ? Math.min((currentValue / (investedAmount * 1.5)) * 100, 100) : 0;
+  const handleInvest = () => {
+    if (invested) return;
+    const amount = balance || 7403;
+    setInvestAmount(amount);
+    setBalance(0);       // zero out the piggy balance
+    setInvested(true);
+  };
 
   return (
     <>
       <main className="flex flex-col max-w-md mx-auto w-full min-h-screen pb-24 px-4 pt-6">
+
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold text-gray-800">💹 เงินของคุณทำงานได้!</h1>
           <p className="text-sm text-gray-500 mt-1">
-            ออมได้ ฿{(balance || 7403).toLocaleString("th-TH")} แล้ว ลองดูว่าถ้าเอาไปลงทุนจะได้เท่าไหร่
+            {invested
+              ? "ยินดีด้วย! เงินของคุณกำลังทำงานอยู่แล้ว 🎉"
+              : `ออมได้ ฿${(balance || 7403).toLocaleString("th-TH")} แล้ว ลองดูว่าถ้าเอาไปลงทุนจะได้เท่าไหร่`}
           </p>
-        </div>
-
-        {/* ─── จำนวนเงินที่ลงทุนปัจจุบัน ─────────────────────────────── */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mb-5">
-          <p className="text-sm font-bold text-gray-700 mb-4">📂 จำนวนเงินที่ลงทุนปัจจุบัน</p>
-
-          {/* Inputs row */}
-          <div className="flex gap-3 mb-4">
-            <div className="flex-1 bg-gray-50 rounded-2xl p-3 border border-gray-100">
-              <p className="text-xs text-gray-400 mb-1">เงินที่ลงทุนไป</p>
-              <div className="flex items-center gap-1">
-                <span className="text-sm text-gray-400">฿</span>
-                <input
-                  type="number"
-                  value={investedAmount}
-                  onChange={(e) => setInvestedAmount(Math.max(0, Number(e.target.value)))}
-                  className="w-full text-lg font-extrabold text-gray-800 bg-transparent focus:outline-none"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-            <div className="w-28 bg-gray-50 rounded-2xl p-3 border border-gray-100">
-              <p className="text-xs text-gray-400 mb-1">ระยะเวลา</p>
-              <div className="flex items-center gap-1">
-                <input
-                  type="number"
-                  value={investedMonths}
-                  onChange={(e) => setInvestedMonths(Math.max(1, Number(e.target.value)))}
-                  className="w-full text-lg font-extrabold text-gray-800 bg-transparent focus:outline-none"
-                />
-                <span className="text-xs text-gray-400 flex-shrink-0">เดือน</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Portfolio value display */}
-          {investedAmount > 0 ? (
-            <motion.div
-              key={`${investedAmount}-${investedMonths}`}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-kt-blue rounded-2xl p-4 relative overflow-hidden"
-            >
-              <div className="absolute -top-5 -right-5 w-20 h-20 bg-white/10 rounded-full" />
-              <p className="text-white/70 text-xs mb-1">มูลค่าปัจจุบัน (ประมาณ S&P500)</p>
-              <p className="text-3xl font-extrabold text-white">฿{formatBaht(currentValue)}</p>
-              <div className="flex items-center gap-2 mt-1">
-                <span className={`text-sm font-bold ${isProfit ? "text-kt-green" : "text-red-300"}`}>
-                  {isProfit ? "+" : ""}฿{formatBaht(investedProfit)} ({isProfit ? "+" : ""}{profitPct}%)
-                </span>
-                <span className="text-white/50 text-xs">ใน {investedMonths} เดือน</span>
-              </div>
-              {/* Progress bar */}
-              <div className="mt-3 bg-white/20 rounded-full h-2 overflow-hidden">
-                <motion.div
-                  className="h-full bg-kt-gold rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${fillPct}%` }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                />
-              </div>
-              <div className="flex justify-between mt-1">
-                <span className="text-white/50 text-xs">ลงทุน ฿{formatBaht(investedAmount)}</span>
-                <span className="text-white/50 text-xs">เป้า ฿{formatBaht(Math.round(investedAmount * 1.5))}</span>
-              </div>
-            </motion.div>
-          ) : (
-            <div className="bg-gray-50 rounded-2xl p-4 flex flex-col items-center gap-2 border border-dashed border-gray-200">
-              <span className="text-3xl">💼</span>
-              <p className="text-sm text-gray-400 text-center">ใส่จำนวนเงินที่ลงทุนไปแล้ว<br/>เพื่อดูมูลค่าปัจจุบัน</p>
-            </div>
-          )}
         </div>
 
         {/* ─── CTA — เริ่มลงทุนกับกรุงไทย ─────────────────────────────── */}
@@ -137,86 +161,89 @@ export default function InvestPage() {
               <p className="text-xs text-gray-500">เปิดบัญชีกองทุนได้ง่ายๆ ผ่านแอป Krungthai NEXT</p>
             </div>
           </div>
-          <button className="w-full bg-kt-blue text-white py-3.5 rounded-2xl font-bold text-base hover:bg-kt-blue-dark transition-colors">
-            🏦 ไปสาขากรุงไทยใกล้บ้าน
+          <button
+            onClick={handleInvest}
+            disabled={invested}
+            className={`w-full py-3.5 rounded-2xl font-bold text-base transition-colors ${invested
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-kt-blue text-white hover:bg-kt-blue-dark"
+              }`}
+          >
+            {invested ? "✅ ลงทุนแล้ว" : "🏦 ไปสาขากรุงไทยใกล้บ้าน"}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2">
-            หรือเปิดผ่านแอป Krungthai NEXT ได้เลย
+            {invested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
           </p>
         </div>
 
-        {/* ─── S&P500 Simulation ───────────────────────────────────────── */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-5 mb-4">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-2xl">🇺🇸</div>
-            <div>
-              <p className="font-bold text-gray-800 text-sm">S&P 500</p>
-              <p className="text-xs text-gray-500">ผลตอบแทนเฉลี่ย 10%/ปี | กลาง-สูง</p>
-            </div>
-            <span className="ml-auto text-xs font-semibold px-2 py-1 rounded-full text-red-500 bg-red-50">
-              กลาง-สูง
-            </span>
-          </div>
-
-          <p className="text-xs text-gray-500 mb-2 font-semibold">จำนวนเงินที่จะลงทุน</p>
-          <div className="flex items-center gap-2 mb-3 bg-gray-50 rounded-xl px-3 py-2.5 border border-gray-100">
-            <span className="text-lg font-bold text-gray-400">฿</span>
-            <input
-              type="number"
-              value={principal}
-              onChange={(e) => setPrincipal(Math.max(0, Number(e.target.value)))}
-              className="flex-1 text-2xl font-extrabold text-gray-800 bg-transparent focus:outline-none"
-            />
-          </div>
-          <div className="flex gap-2 mb-4">
-            {[balance, 10000, 50000, 100000].map((v) => (
-              <button
-                key={v}
-                onClick={() => setPrincipal(v)}
-                className={`flex-1 py-1.5 rounded-xl text-xs font-semibold transition-colors ${
-                  principal === v ? "bg-kt-blue text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                ฿{v >= 1000 ? `${(v / 1000).toFixed(0)}K` : v}
-              </button>
-            ))}
-          </div>
-
-          {/* Time tabs */}
-          <div className="flex bg-gray-100 rounded-2xl p-1 mb-4">
-            {TIME_OPTIONS.map((opt, i) => (
-              <button
-                key={i}
-                onClick={() => setTimeIdx(i)}
-                className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                  timeIdx === i ? "bg-white text-kt-blue shadow-sm" : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Result card */}
-          <motion.div
-            key={`${principal}-${years}`}
-            className="bg-gradient-to-br from-blue-900 to-blue-950 rounded-2xl p-4 text-white relative overflow-hidden"
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.3 }}
+        {/* ─── จำนวนเงินลงทุน ──────────────────────────────────────────── */}
+        <div className="bg-kt-blue rounded-3xl p-5 mb-6 shadow-lg">
+          <p className="text-white/70 text-sm mb-1">จำนวนเงินลงทุน</p>
+          <motion.p
+            key={investAmount}
+            className="text-4xl font-extrabold text-white"
+            initial={{ scale: 1.08 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 400 }}
           >
-            <div className="absolute -top-6 -right-6 w-24 h-24 bg-white/10 rounded-full" />
-            <p className="text-white/60 text-xs mb-1">ถ้าลงทุน ฿{formatBaht(principal)} ใน S&P500 เป็นเวลา {TIME_OPTIONS[timeIdx].label}</p>
-            <p className="text-3xl font-extrabold">฿{formatBaht(projected.final)}</p>
-            <p className="text-kt-gold font-semibold text-sm mt-0.5">
-              กำไร +฿{formatBaht(projected.profit)} (+{projected.pct}%)
-            </p>
-          </motion.div>
-
-          <p className="text-xs text-gray-400 text-center mt-3 leading-relaxed">
-            ⚠️ ผลตอบแทนที่แสดงเป็นค่าเฉลี่ยจากอดีต ไม่ใช่การรับประกัน
-          </p>
+            ฿{investAmount.toLocaleString("th-TH")}
+          </motion.p>
         </div>
+
+        {/* ─── Post-invest: Donut Chart OR Mascot ──────────────────────── */}
+        <AnimatePresence mode="wait">
+          {invested ? (
+            <motion.div
+              key="chart"
+              className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              <p className="font-bold text-gray-800 text-base mb-1">พอร์ตการลงทุนของคุณ</p>
+              <p className="text-xs text-gray-400 mb-5">การกระจายแบบผสมผสานสำหรับผลตอบแทนระยะยาว</p>
+              <DonutChart amount={investAmount} />
+              <p className="text-xs text-gray-400 text-center mt-5 leading-relaxed">
+                ⚠️ ผลตอบแทนที่แสดงเป็นค่าเฉลี่ยจากอดีต ไม่ใช่การรับประกัน
+              </p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="mascot"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Bobbing mascot */}
+              <motion.div
+                className="flex flex-col items-center py-4"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+              >
+                <div role="img" aria-label="นกสีฟ้า กรุงไทย" className="select-none">
+                  <BlueBirdMascot />
+                </div>
+              </motion.div>
+
+              {/* Encourage text */}
+              <div className="flex flex-col items-center gap-2 mt-2 mb-4 px-2 text-center">
+                <p className="text-lg font-extrabold text-kt-blue leading-snug">
+                  เริ่มลงทุนวันนี้ดีกว่าพรุ่งนี้! 🚀
+                </p>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  แม้จะเริ่มต้นด้วยเงินน้อย ก็สร้างอนาคตที่ดีได้<br />
+                  เงินทุกบาทที่ลงทุนคือก้าวแรกสู่อิสรภาพทางการเงิน 💙
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  &quot;การลงทุนที่ดีที่สุดคือการลงทุนในตัวคุณเอง และอนาคตของคุณ&quot;
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
       </main>
 
       <BottomNav />

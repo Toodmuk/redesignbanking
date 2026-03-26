@@ -21,8 +21,8 @@ const THAI_MONTHS = [
   "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.",
 ];
 const THAI_MONTHS_LONG = [
-  "มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน",
-  "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม",
+  "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
+  "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
 ];
 
 function toDateKey(d: Date) {
@@ -86,11 +86,10 @@ function StatCard({
 }) {
   return (
     <div
-      className={`rounded-2xl p-4 border ${
-        accent
+      className={`rounded-2xl p-4 border ${accent
           ? "bg-kt-blue border-kt-blue text-white"
           : "bg-white border-gray-100 shadow-sm"
-      }`}
+        }`}
     >
       <p className="text-xl mb-1">{emoji}</p>
       <p className={`text-xl font-extrabold ${accent ? "text-white" : "text-gray-800"}`}>
@@ -205,8 +204,8 @@ export default function StatsPage() {
     tab === "daily"
       ? stats.avgPerDay
       : Math.round(
-          monthlyData.reduce((s, d) => s + d.amount, 0) / monthlyData.filter((d) => d.amount > 0).length || 0
-        );
+        monthlyData.reduce((s, d) => s + d.amount, 0) / monthlyData.filter((d) => d.amount > 0).length || 0
+      );
 
   return (
     <>
@@ -220,7 +219,7 @@ export default function StatsPage() {
         {/* Motivational banner */}
         <motion.div
           className="rounded-2xl px-5 py-3 mb-5 flex items-center gap-3"
-          style={{ backgroundColor: "#FFC600" }}
+          style={{ backgroundColor: "#FFEE8C" }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -249,11 +248,10 @@ export default function StatsPage() {
             <button
               key={t.key}
               onClick={() => setTab(t.key)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${
-                tab === t.key
+              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tab === t.key
                   ? "bg-white text-kt-blue shadow-sm"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               {t.label}
             </button>
@@ -286,7 +284,7 @@ export default function StatsPage() {
               <Tooltip content={<ChartTooltip />} cursor={{ fill: "#F3F4F6", radius: 6 }} />
               <ReferenceLine
                 y={avgLine}
-                stroke="#F59E0B"
+                stroke="#FFEE8C"
                 strokeDasharray="4 3"
                 strokeWidth={1.5}
               />
@@ -296,8 +294,8 @@ export default function StatsPage() {
                     key={entry.key}
                     fill={
                       (entry as { isCurrent?: boolean; isToday?: boolean }).isCurrent ||
-                      (entry as { isToday?: boolean }).isToday
-                        ? "#F59E0B"
+                        (entry as { isToday?: boolean }).isToday
+                        ? "#FFEE8C"
                         : "#1A56DB"
                     }
                     opacity={entry.amount === 0 ? 0.15 : 1}
@@ -312,11 +310,11 @@ export default function StatsPage() {
               <span className="text-xs text-gray-400">ยอดออม</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-kt-gold" style={{ borderTop: "2px dashed #F59E0B" }} />
+              <div className="w-3 h-0.5" style={{ borderTop: "2px dashed #FFEE8C" }} />
               <span className="text-xs text-gray-400">ค่าเฉลี่ย ฿{fmt(avgLine)}</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="w-3 h-3 rounded-sm bg-kt-gold" />
+              <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: "#FFEE8C" }} />
               <span className="text-xs text-gray-400">
                 {tab === "daily" ? "วันนี้" : "เดือนนี้"}
               </span>
@@ -330,7 +328,7 @@ export default function StatsPage() {
           return (
             <motion.div
               className="rounded-3xl p-6 shadow-md"
-              style={{ backgroundColor: "#FFC600" }}
+              style={{ backgroundColor: "#FFEE8C" }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
