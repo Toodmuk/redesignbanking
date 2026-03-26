@@ -258,6 +258,7 @@ export default function Dashboard() {
 
   const [showAdmin, setShowAdmin] = useState(false);
   const [showCoinBurst, setShowCoinBurst] = useState(false);
+  const [showBankAlert, setShowBankAlert] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [investSnippet, setInvestSnippet] = useState<{
     balance: number;
@@ -280,12 +281,15 @@ export default function Dashboard() {
       .filter((tx) => tx.date.slice(0, 10) === todayKeyNow)
       .reduce((s, tx) => s + tx.amount, 0);
     const todayTotalAfter = todayTotalBefore + amount;
-    const dailyTargetNow = 50;
+    const dailyTargetNow = dailyTarget;
     const justHitDailyGoal = todayTotalBefore < dailyTargetNow && todayTotalAfter >= dailyTargetNow;
+    const justHitBankDeposit = balance < bankDepositAmount && newBalance >= bankDepositAmount;
 
     // 1. Thai TTS
-    if (justHitDailyGoal) {
-      // Delay to let "เงินเข้าแล้ว!" finish first
+    if (justHitBankDeposit) {
+      speakThai("เงินเข้าแล้ว!");
+      setTimeout(() => speakThai("พี่แม็ค เอาเงินไปฝากธนาคารด้วย"), 1300);
+    } else if (justHitDailyGoal) {
       speakThai("เงินเข้าแล้ว!");
       setTimeout(() => speakThai("ยินดีด้วยค่ะ พี่แม็ค"), 1200);
     } else {
@@ -295,8 +299,10 @@ export default function Dashboard() {
     // 2. Coin burst animation
     setShowCoinBurst(true);
 
-    // 3. Toast
-    if (newBalance >= goal && balance < goal) {
+    // 3. Toast + bank alert
+    if (justHitBankDeposit) {
+      setTimeout(() => setShowBankAlert(true), 800);
+    } else if (newBalance >= goal && balance < goal) {
       setTimeout(() => setToast("🎉 กระปุกเต็มแล้ว! ถึงเวลาไปฝากธนาคาร 🏦"), 800);
     } else if (justHitDailyGoal) {
       setTimeout(() => setToast("🎯 ถึงเป้าหมายวันนี้แล้ว! ยินดีด้วยค่ะ 🎉"), 800);
@@ -550,6 +556,42 @@ export default function Dashboard() {
                   </p>
                 </div>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bank Deposit Alert */}
+      <AnimatePresence>
+        {showBankAlert && (
+          <motion.div
+            className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center px-5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowBankAlert(false)}
+          >
+            <motion.div
+              className="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 22, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <p className="text-6xl mb-3">🐷</p>
+              <h2 className="text-lg font-extrabold text-gray-800 mb-2">กระปุกใกล้เต็มแล้ว!</h2>
+              <p className="text-sm text-gray-500 leading-relaxed mb-5">
+                ดอกเบี้ยธนาคารจะเริ่มคิดเมื่อเงินถูกนำไปฝากธนาคารแล้วเท่านั้น
+                <br />
+                <span className="font-semibold text-orange-500">หากเงินอยู่ในกระปุกจะไม่คิดดอกเบี้ย</span>
+              </p>
+              <button
+                onClick={() => setShowBankAlert(false)}
+                className="w-full bg-kt-blue text-white font-bold py-3 rounded-2xl text-sm hover:bg-kt-blue-dark transition-colors"
+              >
+                🏦 รับทราบ ไปฝากธนาคาร!
+              </button>
             </motion.div>
           </motion.div>
         )}
