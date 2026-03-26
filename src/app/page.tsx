@@ -445,9 +445,8 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <h2 className="text-sm font-extrabold text-gray-800">
-                ยอดเงินรวม <span className="text-[10px] font-medium text-gray-400 ml-1.5">รวม ฿10,000 กับบัญชีกรุงไทย</span>
-              </h2>
+              <p className="text-sm font-extrabold text-gray-800 leading-tight">ยอดเงินรวม</p>
+              <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿10,000 กับบัญชีกรุงไทย</p>
             </div>
           </div>
           <p className="text-xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
