@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import BottomNav from "@/components/BottomNav";
 import { usePiggyStore } from "@/store/piggyStore";
 
@@ -94,31 +95,17 @@ function DonutChart({ amount }: { amount: number }) {
   );
 }
 
-// ─── Blue Bird Mascot ─────────────────────────────────────────────────────────
 function BlueBirdMascot() {
   return (
-    <svg width="144" height="144" viewBox="0 0 144 144" fill="none" xmlns="http://www.w3.org/2000/svg" className="drop-shadow-xl">
-      <ellipse cx="72" cy="100" rx="44" ry="34" fill="#00A1E0" />
-      <ellipse cx="34" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(-15 34 102)" />
-      <ellipse cx="110" cy="102" rx="20" ry="28" fill="#0081B3" transform="rotate(15 110 102)" />
-      <path d="M52 126 Q60 140 72 133 Q84 140 92 126 L80 118 L72 122 L64 118 Z" fill="#0081B3" />
-      <circle cx="72" cy="56" r="30" fill="#00A1E0" />
-      <path d="M62 28 Q66 16 72 24 Q78 14 82 22 Q79 30 72 28 Q65 30 62 28Z" fill="#0081B3" />
-      <circle cx="60" cy="50" r="9" fill="white" />
-      <circle cx="62" cy="50" r="6" fill="#1565C0" />
-      <circle cx="64" cy="48" r="2.5" fill="white" />
-      <circle cx="84" cy="50" r="9" fill="white" />
-      <circle cx="86" cy="50" r="6" fill="#1565C0" />
-      <circle cx="88" cy="48" r="2.5" fill="white" />
-      <path d="M68 63 L72 73 L76 63 Q72 58 68 63Z" fill="#F59E0B" />
-      <circle cx="51" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
-      <circle cx="93" cy="62" r="6" fill="#FF9BB0" opacity="0.45" />
-      <rect x="58" y="95" width="28" height="5" rx="2.5" fill="#0081B3" />
-      <rect x="60" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
-      <rect x="51" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
-      <rect x="80" y="130" width="4" height="8" rx="2" fill="#F59E0B" />
-      <rect x="71" y="135" width="16" height="3" rx="1.5" fill="#F59E0B" />
-    </svg>
+    <div className="relative w-36 h-36 drop-shadow-2xl">
+      <Image
+        src="/bird-mascot.png"
+        alt="Krungthai Blue Bird Mascot"
+        fill
+        className="object-contain"
+        priority
+      />
+    </div>
   );
 }
 

@@ -4,6 +4,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "กระปุกออมสิน Smart — Krungthai",
   description: "กระปุกออมสิน Smart ที่เชื่อมกับแอปมือถือของกรุงไทย",
+  appleWebApp: {
+    capable: true,
+    title: "Krungthai Smart",
+    statusBarStyle: "default",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
