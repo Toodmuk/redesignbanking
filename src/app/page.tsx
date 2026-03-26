@@ -357,7 +357,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <main className="flex flex-col max-w-md mx-auto w-full min-h-screen pb-24 px-4 pt-6">
+      <main className="flex flex-col max-w-md mx-auto w-full min-h-screen pb-24 px-4 pt-12">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
