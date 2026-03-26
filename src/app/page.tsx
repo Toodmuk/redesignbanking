@@ -506,7 +506,7 @@ export default function Dashboard() {
 
         {/* Piggy Bank */}
         <motion.div
-          className="flex flex-col items-center -mt-4 mb-8"
+          className="flex flex-col items-center mt-0 mb-8"
           animate={{ y: [0, -8, 0] }}
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
         >
