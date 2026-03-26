@@ -362,7 +362,7 @@ export default function Dashboard() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <p className="text-sm text-gray-500">สวัสดี, {userName}! 👋</p>
-            <h1 className="text-xl font-bold text-gray-800">กระปุกออมสิน Smart</h1>
+            <h1 className="text-xl font-bold text-gray-800">กรุ๊งกริ็ง by กรุงไทย</h1>
           </div>
           <div className="flex items-center gap-2">
             <AnimatePresence>
