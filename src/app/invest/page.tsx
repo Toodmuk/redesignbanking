@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import BottomNav from "@/components/BottomNav";
 import { usePiggyStore } from "@/store/piggyStore";
 

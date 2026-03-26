@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import BottomNav from "@/components/BottomNav";
 import { usePiggyStore } from "@/store/piggyStore";
 
@@ -400,8 +401,6 @@ export default function Dashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-
-
           <p className="text-white/70 text-sm mb-1 relative">ยอดเงินในกระปุก</p>
           <motion.p
             key={balance}
@@ -427,6 +426,33 @@ export default function Dashboard() {
           <p className="text-white/70 text-xs mt-1.5 text-right relative">
             {progress.toFixed(0)}% ของเป้าหมาย
           </p>
+        </motion.div>
+
+        {/* Total Savings Card */}
+        <motion.div
+          className="bg-white rounded-3xl p-5 mb-6 shadow-sm border border-gray-100 flex items-center justify-between"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden relative flex-shrink-0 bg-kt-blue-light/30 p-1">
+              <Image
+                src="/ktb-phoenix.jpg"
+                alt="Krungthai Logo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div>
+              <p className="text-[10px] text-kt-blue font-bold uppercase tracking-wider mb-0.5">KTB ACCOUNT</p>
+              <p className="text-sm font-extrabold text-gray-800 leading-tight">ยอดเงินออมรวมกับบัญชีกรุงไทย</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
+            <p className="text-[10px] text-gray-400 font-medium">รวม ฿10,000 จากบัญชีออมทรัพย์</p>
+          </div>
         </motion.div>
 
         {/* Stats Row */}
