@@ -254,7 +254,7 @@ function BlueBirdMascot() {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { userName, balance, goal, dailyTarget, bankDepositAmount, streak, deposit, transactions } = usePiggyStore();
+  const { userName, balance, goal, dailyTarget, bankDepositAmount, streak, deposit, setBalance, transactions } = usePiggyStore();
 
   const [showAdmin, setShowAdmin] = useState(false);
   const [showCoinBurst, setShowCoinBurst] = useState(false);
@@ -587,10 +587,21 @@ export default function Dashboard() {
                 <span className="font-semibold text-orange-500">หากเงินอยู่ในกระปุกจะไม่คิดดอกเบี้ย</span>
               </p>
               <button
-                onClick={() => setShowBankAlert(false)}
-                className="w-full bg-kt-blue text-white font-bold py-3 rounded-2xl text-sm hover:bg-kt-blue-dark transition-colors"
+                onClick={() => {
+                  setBalance(0);
+                  setShowBankAlert(false);
+                  setTimeout(() => setToast("✅ ฝากธนาคารเรียบร้อย! กระปุกพร้อมออมใหม่ 🎉"), 300);
+                  setTimeout(() => setToast(null), 3000);
+                }}
+                className="w-full bg-kt-blue text-white font-bold py-3.5 rounded-2xl text-base hover:bg-kt-blue-dark transition-colors shadow-md"
               >
-                🏦 รับทราบ ไปฝากธนาคาร!
+                🏦 ฝากธนาคารแล้ว!
+              </button>
+              <button
+                onClick={() => setShowBankAlert(false)}
+                className="w-full mt-2 text-gray-400 text-sm py-2"
+              >
+                ยังไม่ได้ฝาก
               </button>
             </motion.div>
           </motion.div>
