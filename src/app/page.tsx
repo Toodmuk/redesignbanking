@@ -519,9 +519,12 @@ export default function Dashboard() {
             </p>
           )}
           
-          <div className="mt-6 px-6 py-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-kt-blue/10 max-w-[260px] mx-auto shadow-sm">
-            <p className="text-[13px] text-gray-500 font-bold italic leading-relaxed text-center">
-              "การออมเงินวันนี้ คือความมั่นคงในวันหน้า"
+          <div className="flex flex-col items-center gap-1.5 mt-4 mb-4 px-2 text-center">
+            <p className="text-lg font-extrabold text-kt-blue leading-snug">
+              ออมวันนี้ รวยวันหน้า! 🚀
+            </p>
+            <p className="text-[13px] text-gray-500 font-bold italic leading-relaxed">
+              &quot;การออมเงินวันนี้ คือความมั่นคงในวันหน้า&quot;
             </p>
           </div>
         </motion.div>
