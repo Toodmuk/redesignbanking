@@ -171,7 +171,7 @@ export default function InvestPage() {
                 : "bg-kt-blue text-white hover:bg-kt-blue-dark"
               }`}
           >
-            {isInvested ? "✅ ลงทุนแล้ว" : `🏦 เริ่มลงทุน ฿${displayAmount.toLocaleString("th-TH")}`}
+            {isInvested ? "✅ ลงทุนแล้ว" : "🏦 เริ่มลงทุน 10% ของยอดเงินรวม"}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2">
             {isInvested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
@@ -179,18 +179,27 @@ export default function InvestPage() {
         </div>
 
         {/* ─── จำนวนเงินลงทุน ──────────────────────────────────────────── */}
-        <div className="bg-kt-blue rounded-3xl p-5 mb-6 shadow-lg">
-          <p className="text-white/70 text-sm mb-1">จำนวนเงินลงทุน</p>
-          <motion.p
-            key={displayAmount}
-            className="text-4xl font-extrabold text-white"
-            initial={{ scale: 1.08 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            ฿{displayAmount.toLocaleString("th-TH")}
-          </motion.p>
-        </div>
+        <AnimatePresence>
+          {isInvested && (
+            <motion.div
+              className="bg-kt-blue rounded-3xl p-5 mb-6 shadow-lg"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+            >
+              <p className="text-white/70 text-sm mb-1">จำนวนเงินลงทุน</p>
+              <motion.p
+                key={displayAmount}
+                className="text-4xl font-extrabold text-white"
+                initial={{ scale: 1.08 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 400 }}
+              >
+                ฿{displayAmount.toLocaleString("th-TH")}
+              </motion.p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ─── Post-invest: Donut Chart OR Mascot ──────────────────────── */}
         <AnimatePresence mode="wait">
