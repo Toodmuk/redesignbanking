@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -113,13 +113,13 @@ function InvestSnippet({
   );
 }
 
-// ─── Admin Panel ──────────────────────────────────────────────────────────────
+// ─── Settings Panel ───────────────────────────────────────────────────────────
 function AdminPanel({ onClose }: { onClose: () => void }) {
-  const { balance, goal, setBalance, setGoal, setStreak, resetAll, loadScenario } =
+  const { goal, dailyTarget, bankDepositAmount, setGoal, setDailyTarget, setBankDepositAmount } =
     usePiggyStore();
-  const [inputBalance, setInputBalance] = useState(String(balance));
   const [inputGoal, setInputGoal] = useState(String(goal));
-  const [inputStreak, setInputStreak] = useState("0");
+  const [inputDailyTarget, setInputDailyTarget] = useState(String(dailyTarget));
+  const [inputBankDeposit, setInputBankDeposit] = useState(String(bankDepositAmount));
 
   return (
     <motion.div
@@ -137,72 +137,19 @@ function AdminPanel({ onClose }: { onClose: () => void }) {
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <span className="text-xl">⚙️</span>
-            <h2 className="text-lg font-bold text-gray-800">Admin Panel</h2>
-            <span className="bg-red-100 text-red-600 text-xs font-semibold px-2 py-0.5 rounded-full">
-              Demo Only
-            </span>
+            <h2 className="text-lg font-bold text-gray-800">ตั้งค่า</h2>
           </div>
-          <button onClick={onClose} className="text-gray-400 text-2xl leading-none">
-            ×
-          </button>
+          <button onClick={onClose} className="text-gray-400 text-2xl leading-none">×</button>
         </div>
 
-        {/* Scenarios */}
-        <div className="mb-5">
-          <p className="text-sm font-semibold text-gray-600 mb-2">📋 โหลด Scenario</p>
-          <div className="grid grid-cols-4 gap-2">
-            {(["P", "A", "B", "C"] as const).map((s) => (
-              <button
-                key={s}
-                onClick={() => {
-                  loadScenario(s);
-                  onClose();
-                }}
-                className={`py-2.5 rounded-xl text-sm font-semibold transition-colors ${s === "P"
-                  ? "bg-kt-blue text-white hover:bg-kt-blue-dark"
-                  : "bg-kt-blue-light text-kt-blue hover:bg-kt-blue hover:text-white"
-                  }`}
-              >
-                {s === "P" ? "พี่แม็ค" : `Scenario ${s}`}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-4 gap-1 mt-1 text-xs text-gray-400 text-center">
-            <span>5 เดือน</span>
-            <span>ผู้ใช้ใหม่</span>
-            <span>1 เดือน</span>
-            <span>Gold</span>
-          </div>
-        </div>
-
-        {/* Manual controls */}
-        <div className="space-y-3">
-          <div>
-            <label className="text-sm font-medium text-gray-600 block mb-1">
-              ยอดเงินในกระปุก (บาท)
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                value={inputBalance}
-                onChange={(e) => setInputBalance(e.target.value)}
-                className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kt-blue"
-              />
-              <button
-                onClick={() => { setBalance(Number(inputBalance)); onClose(); }}
-                className="bg-kt-blue text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
-              >
-                ตั้งค่า
-              </button>
-            </div>
-          </div>
-          <div>
-            <label className="text-sm font-medium text-gray-600 block mb-1">
-              เป้าหมาย (บาท)
-            </label>
+        <div className="space-y-4">
+          {/* เป้าหมาย */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <label className="text-sm font-bold text-gray-700 block mb-1">🎯 เป้าหมาย (บาท)</label>
+            <p className="text-xs text-gray-400 mb-2">ยอดเงินที่ต้องการออมให้ถึง</p>
             <div className="flex gap-2">
               <input
                 type="number"
@@ -212,37 +159,53 @@ function AdminPanel({ onClose }: { onClose: () => void }) {
               />
               <button
                 onClick={() => { setGoal(Number(inputGoal)); onClose(); }}
-                className="bg-kt-gold text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
+                className="bg-kt-blue text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
               >
-                ตั้งค่า
+                บันทึก
               </button>
             </div>
           </div>
-          <div>
-            <label className="text-sm font-medium text-gray-600 block mb-1">Streak (วัน)</label>
+
+          {/* เป้าหมายวันนี้ */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <label className="text-sm font-bold text-gray-700 block mb-1">📅 เป้าหมายวันนี้ (บาท)</label>
+            <p className="text-xs text-gray-400 mb-2">ยอดที่ต้องการหยอดต่อวัน</p>
             <div className="flex gap-2">
               <input
                 type="number"
-                value={inputStreak}
-                onChange={(e) => setInputStreak(e.target.value)}
+                value={inputDailyTarget}
+                onChange={(e) => setInputDailyTarget(e.target.value)}
                 className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kt-blue"
               />
               <button
-                onClick={() => { setStreak(Number(inputStreak)); onClose(); }}
+                onClick={() => { setDailyTarget(Number(inputDailyTarget)); onClose(); }}
+                className="bg-kt-gold text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
+              >
+                บันทึก
+              </button>
+            </div>
+          </div>
+
+          {/* ยอดที่ต้องฝากธนาคาร */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <label className="text-sm font-bold text-gray-700 block mb-1">🏦 ยอดที่ต้องฝากธนาคาร (บาท)</label>
+            <p className="text-xs text-gray-400 mb-2">เมื่อกระปุกเต็ม ต้องนำเงินไปฝากเป็นจำนวนนี้</p>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={inputBankDeposit}
+                onChange={(e) => setInputBankDeposit(e.target.value)}
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kt-blue"
+              />
+              <button
+                onClick={() => { setBankDepositAmount(Number(inputBankDeposit)); onClose(); }}
                 className="bg-kt-green text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
               >
-                ตั้งค่า
+                บันทึก
               </button>
             </div>
           </div>
         </div>
-
-        <button
-          onClick={() => { resetAll(); onClose(); }}
-          className="w-full mt-5 py-3 rounded-xl border-2 border-red-300 text-red-500 font-semibold text-sm hover:bg-red-50 transition-colors"
-        >
-          🗑️ Reset → โหลดข้อมูลพี่แม็คใหม่
-        </button>
       </motion.div>
     </motion.div>
   );
@@ -291,7 +254,7 @@ function BlueBirdMascot() {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { userName, balance, goal, streak, deposit, transactions } = usePiggyStore();
+  const { userName, balance, goal, dailyTarget, bankDepositAmount, streak, deposit, transactions } = usePiggyStore();
 
   const [showAdmin, setShowAdmin] = useState(false);
   const [showCoinBurst, setShowCoinBurst] = useState(false);
@@ -302,18 +265,9 @@ export default function Dashboard() {
   } | null>(null);
   const [showInvestAd, setShowInvestAd] = useState(true);
 
-  // Hidden admin: tap KTB logo 5× quickly
-  const tapCount = useRef(0);
-  const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Open settings with 1 tap
   const handleLogoTap = useCallback(() => {
-    tapCount.current += 1;
-    if (tapTimer.current) clearTimeout(tapTimer.current);
-    if (tapCount.current >= 5) {
-      tapCount.current = 0;
-      setShowAdmin(true);
-      return;
-    }
-    tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1500);
+    setShowAdmin(true);
   }, []);
 
   const handleDeposit = (amount: number) => {
@@ -364,7 +318,6 @@ export default function Dashboard() {
   const todayTotal = transactions
     .filter((tx) => tx.date.slice(0, 10) === todayKey)
     .reduce((s, tx) => s + tx.amount, 0);
-  const dailyTarget = 50;
   const dailyPct = Math.min((todayTotal / dailyTarget) * 100, 100);
   const dailyDone = dailyPct >= 100;
 
