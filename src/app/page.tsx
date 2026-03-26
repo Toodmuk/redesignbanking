@@ -320,8 +320,23 @@ export default function Dashboard() {
     deposit(amount);
     const newBalance = balance + amount;
 
-    // 1. Thai TTS — "เงินเข้าแล้ว!"
-    speakThai("เงินเข้าแล้ว!");
+    // Calculate today's total BEFORE and AFTER this deposit
+    const todayKeyNow = new Date().toISOString().slice(0, 10);
+    const todayTotalBefore = transactions
+      .filter((tx) => tx.date.slice(0, 10) === todayKeyNow)
+      .reduce((s, tx) => s + tx.amount, 0);
+    const todayTotalAfter = todayTotalBefore + amount;
+    const dailyTargetNow = 50;
+    const justHitDailyGoal = todayTotalBefore < dailyTargetNow && todayTotalAfter >= dailyTargetNow;
+
+    // 1. Thai TTS
+    if (justHitDailyGoal) {
+      // Delay to let "เงินเข้าแล้ว!" finish first
+      speakThai("เงินเข้าแล้ว!");
+      setTimeout(() => speakThai("ยินดีด้วยค่ะ พี่แม็ค"), 1200);
+    } else {
+      speakThai("เงินเข้าแล้ว!");
+    }
 
     // 2. Coin burst animation
     setShowCoinBurst(true);
@@ -329,6 +344,8 @@ export default function Dashboard() {
     // 3. Toast
     if (newBalance >= goal && balance < goal) {
       setTimeout(() => setToast("🎉 กระปุกเต็มแล้ว! ถึงเวลาไปฝากธนาคาร 🏦"), 800);
+    } else if (justHitDailyGoal) {
+      setTimeout(() => setToast("🎯 ถึงเป้าหมายวันนี้แล้ว! ยินดีด้วยค่ะ 🎉"), 800);
     } else {
       setToast(`✅ หยอดเงิน ฿${amount} เรียบร้อย!`);
     }
