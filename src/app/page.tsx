@@ -436,7 +436,7 @@ export default function Dashboard() {
           transition={{ delay: 0.1 }}
         >
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden relative flex-shrink-0 bg-kt-blue-light/30 p-1">
+            <div className="w-10 h-10 rounded-xl overflow-hidden relative flex-shrink-0 bg-kt-blue-light/10 p-0.5">
               <Image
                 src="/ktb-phoenix.jpg"
                 alt="Krungthai Logo"
@@ -445,14 +445,12 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <p className="text-[10px] text-kt-blue font-bold uppercase tracking-wider mb-0.5">KTB ACCOUNT</p>
-              <p className="text-sm font-extrabold text-gray-800 leading-tight">ยอดเงินออมรวมกับบัญชีกรุงไทย</p>
+              <h2 className="text-sm font-extrabold text-gray-800">
+                ยอดเงินรวม <span className="text-[10px] font-medium text-gray-400 ml-1.5">รวม ฿10,000 กับบัญชีกรุงไทย</span>
+              </h2>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
-            <p className="text-[10px] text-gray-400 font-medium">รวม ฿10,000 จากบัญชีออมทรัพย์</p>
-          </div>
+          <p className="text-xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
         </motion.div>
 
         {/* Stats Row */}
