@@ -115,11 +115,12 @@ function InvestSnippet({
 
 // ─── Settings Panel ───────────────────────────────────────────────────────────
 function AdminPanel({ onClose }: { onClose: () => void }) {
-  const { goal, dailyTarget, bankDepositAmount, setGoal, setDailyTarget, setBankDepositAmount, resetAll } =
+  const { goal, dailyTarget, bankDepositAmount, bankAccountBalance, setGoal, setDailyTarget, setBankDepositAmount, setBankAccountBalance, resetAll } =
     usePiggyStore();
   const [inputGoal, setInputGoal] = useState(String(goal));
   const [inputDailyTarget, setInputDailyTarget] = useState(String(dailyTarget));
   const [inputBankDeposit, setInputBankDeposit] = useState(String(bankDepositAmount));
+  const [inputBankBalance, setInputBankBalance] = useState(String(bankAccountBalance));
 
   return (
     <motion.div
@@ -204,7 +205,26 @@ function AdminPanel({ onClose }: { onClose: () => void }) {
                 บันทึก
               </button>
             </div>
+            {/* ยอดเงินในบัญชี */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <label className="text-sm font-bold text-gray-700 block mb-1">🏦 ยอดเงินในบัญชี (บาท)</label>
+            <p className="text-xs text-gray-400 mb-2">เงินออมที่อยู่ในธนาคารกรุงไทย</p>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={inputBankBalance}
+                onChange={(e) => setInputBankBalance(e.target.value)}
+                className="flex-1 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-kt-blue"
+              />
+              <button
+                onClick={() => { setBankAccountBalance(Number(inputBankBalance)); onClose(); }}
+                className="bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold"
+              >
+                บันทึก
+              </button>
+            </div>
           </div>
+        </div>
         </div>
 
         <button
@@ -261,7 +281,7 @@ function BlueBirdMascot() {
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { userName, balance, goal, dailyTarget, bankDepositAmount, streak, deposit, setBalance, transactions } = usePiggyStore();
+  const { userName, balance, goal, dailyTarget, bankDepositAmount, bankAccountBalance, streak, deposit, depositToBank, transactions } = usePiggyStore();
 
   const [showAdmin, setShowAdmin] = useState(false);
   const [showCoinBurst, setShowCoinBurst] = useState(false);
@@ -349,7 +369,7 @@ export default function Dashboard() {
               {showBankActionBtn && (
                 <motion.button
                   onClick={() => {
-                    setBalance(0);
+                    depositToBank();
                     setShowBankActionBtn(false);
                     setTimeout(() => setToast("✅ ฝากธนาคารเรียบร้อย! กระปุกพร้อมออมใหม่ 🎉"), 300);
                     setTimeout(() => setToast(null), 3000);
@@ -452,11 +472,11 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-extrabold text-gray-800 leading-tight">ยอดเงินรวม</p>
-              <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿10,000 กับบัญชี</p>
+              <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿{bankAccountBalance.toLocaleString()} กับบัญชี</p>
             </div>
           </div>
           <p className="text-3xl font-extrabold text-kt-blue text-right">
-            ฿{(10000 + balance).toLocaleString("th-TH")}
+            ฿{(bankAccountBalance + balance).toLocaleString("th-TH")}
           </p>
         </motion.div>
 
