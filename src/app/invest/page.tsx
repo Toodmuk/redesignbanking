@@ -126,10 +126,10 @@ function BlueBirdMascot() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function InvestPage() {
   const { balance, bankAccountBalance, investedAmount, investToMarket } = usePiggyStore();
-  
+
   const totalSavings = balance + bankAccountBalance;
   const isInvested = investedAmount > 0;
-  
+
   // Show actual invested amount if invested, else preview 10% of current total
   const displayAmount = isInvested ? investedAmount : totalSavings * 0.1;
 
@@ -167,11 +167,11 @@ export default function InvestPage() {
             onClick={handleInvest}
             disabled={isInvested}
             className={`w-full py-3.5 rounded-2xl font-bold text-base transition-colors ${isInvested
-                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                : "bg-kt-blue text-white hover:bg-kt-blue-dark"
+              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-kt-blue text-white hover:bg-kt-blue-dark"
               }`}
           >
-            {isInvested ? "✅ ลงทุนแล้ว" : `🏦 เริ่มลงทุน ฿${displayAmount.toLocaleString("th-TH")}`}
+            {isInvested ? "✅ ลงทุนแล้ว" : "🏦 เริ่มลงทุน"}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2">
             {isInvested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
