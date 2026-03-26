@@ -446,7 +446,7 @@ export default function Dashboard() {
             </div>
             <div>
               <p className="text-sm font-extrabold text-gray-800 leading-tight">ยอดเงินรวม</p>
-              <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿10,000 กับบัญชีกรุงไทย</p>
+              <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿10,000 กับบัญชี</p>
             </div>
           </div>
           <p className="text-3xl font-extrabold text-kt-blue text-right">
