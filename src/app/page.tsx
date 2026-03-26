@@ -518,6 +518,12 @@ export default function Dashboard() {
               ออมมา {streak} วันแล้ว! เก่งมาก 🎉
             </p>
           )}
+          
+          <div className="mt-6 px-6 py-3 bg-white/50 backdrop-blur-sm rounded-2xl border border-kt-blue/10 max-w-[260px] mx-auto shadow-sm">
+            <p className="text-[13px] text-gray-500 font-bold italic leading-relaxed text-center">
+              "การออมเงินวันนี้ คือความมั่นคงในวันหน้า"
+            </p>
+          </div>
         </motion.div>
 
       </main>
