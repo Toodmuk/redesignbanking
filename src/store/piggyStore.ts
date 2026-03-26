@@ -44,7 +44,7 @@ const initialState = {
   balance: 0,
   goal: 10_000,
   dailyTarget: 50,
-  bankDepositAmount: 10_000,
+  bankDepositAmount: 500,
   transactions: [] as Transaction[],
   streak: 0,
   tier: "bronze" as Tier,
