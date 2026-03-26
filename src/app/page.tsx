@@ -115,7 +115,7 @@ function InvestSnippet({
 
 // ─── Settings Panel ───────────────────────────────────────────────────────────
 function AdminPanel({ onClose }: { onClose: () => void }) {
-  const { goal, dailyTarget, bankDepositAmount, setGoal, setDailyTarget, setBankDepositAmount } =
+  const { goal, dailyTarget, bankDepositAmount, setGoal, setDailyTarget, setBankDepositAmount, resetAll } =
     usePiggyStore();
   const [inputGoal, setInputGoal] = useState(String(goal));
   const [inputDailyTarget, setInputDailyTarget] = useState(String(dailyTarget));
@@ -206,6 +206,13 @@ function AdminPanel({ onClose }: { onClose: () => void }) {
             </div>
           </div>
         </div>
+
+        <button
+          onClick={() => { resetAll(); onClose(); }}
+          className="w-full mt-4 py-3 rounded-2xl border-2 border-red-200 text-red-400 font-semibold text-sm hover:bg-red-50 transition-colors"
+        >
+          🔄 รีเซ็ตทุกอย่างเป็นค่าเริ่มต้น
+        </button>
       </motion.div>
     </motion.div>
   );
