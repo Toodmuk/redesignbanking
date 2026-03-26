@@ -266,6 +266,7 @@ export default function Dashboard() {
   const [showAdmin, setShowAdmin] = useState(false);
   const [showCoinBurst, setShowCoinBurst] = useState(false);
   const [showBankAlert, setShowBankAlert] = useState(false);
+  const [showBankActionBtn, setShowBankActionBtn] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const [investSnippet, setInvestSnippet] = useState<{
     balance: number;
@@ -343,14 +344,36 @@ export default function Dashboard() {
             <p className="text-sm text-gray-500">สวัสดี, {userName}! 👋</p>
             <h1 className="text-xl font-bold text-gray-800">กระปุกออมสิน Smart</h1>
           </div>
-          {/* Tap 5× to open admin */}
-          <button
-            onClick={handleLogoTap}
-            className="w-12 h-12 rounded-full bg-kt-blue flex items-center justify-center text-white font-extrabold text-lg shadow-lg select-none active:scale-90 transition-transform"
-            aria-label="โลโก้กรุงไทย"
-          >
-            KTB
-          </button>
+          <div className="flex items-center gap-2">
+            <AnimatePresence>
+              {showBankActionBtn && (
+                <motion.button
+                  onClick={() => {
+                    setBalance(0);
+                    setShowBankActionBtn(false);
+                    setTimeout(() => setToast("✅ ฝากธนาคารเรียบร้อย! กระปุกพร้อมออมใหม่ 🎉"), 300);
+                    setTimeout(() => setToast(null), 3000);
+                  }}
+                  className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-2xl shadow-lg border-2 border-orange-200 active:scale-90 transition-transform"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  aria-label="ฝากธนาคาร"
+                  title="ฝากธนาคาร"
+                >
+                  🏦
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            <button
+              onClick={handleLogoTap}
+              className="w-12 h-12 rounded-full bg-kt-blue flex items-center justify-center text-white font-extrabold text-lg shadow-lg select-none active:scale-90 transition-transform"
+              aria-label="โลโก้กรุงไทย"
+            >
+              KTB
+            </button>
+          </div>
         </div>
 
         {/* Investment Nudge Card — top position, red accent */}
@@ -595,20 +618,12 @@ export default function Dashboard() {
               </p>
               <button
                 onClick={() => {
-                  setBalance(0);
                   setShowBankAlert(false);
-                  setTimeout(() => setToast("✅ ฝากธนาคารเรียบร้อย! กระปุกพร้อมออมใหม่ 🎉"), 300);
-                  setTimeout(() => setToast(null), 3000);
+                  setShowBankActionBtn(true);
                 }}
                 className="w-full bg-kt-blue text-white font-bold py-3.5 rounded-2xl text-base hover:bg-kt-blue-dark transition-colors shadow-md"
               >
-                🏦 ฝากธนาคารแล้ว!
-              </button>
-              <button
-                onClick={() => setShowBankAlert(false)}
-                className="w-full mt-2 text-gray-400 text-sm py-2"
-              >
-                ยังไม่ได้ฝาก
+                เข้าใจแล้ว
               </button>
             </motion.div>
           </motion.div>
