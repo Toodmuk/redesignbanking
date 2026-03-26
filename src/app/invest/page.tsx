@@ -171,7 +171,7 @@ export default function InvestPage() {
               : "bg-kt-blue text-white hover:bg-kt-blue-dark"
               }`}
           >
-            {isInvested ? "✅ ลงทุนแล้ว" : "🏦 เริ่มลงทุน"}
+            {isInvested ? "✅ ลงทุนแล้ว" : "🏦 ติดต่อสาขากรุงไทยใกล้ฉัน"}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2">
             {isInvested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
