@@ -17,6 +17,7 @@ export interface PiggyState {
   bankAccountBalance: number;
   dailyTarget: number;
   bankDepositAmount: number;
+  investedAmount: number;
   transactions: Transaction[];
   streak: number;
   tier: Tier;
@@ -25,6 +26,7 @@ export interface PiggyState {
   deposit: (amount: number) => void;
   setBalance: (amount: number) => void;
   depositToBank: () => void;
+  investToMarket: () => void;
   setGoal: (goal: number) => void;
   setBankAccountBalance: (amount: number) => void;
   setDailyTarget: (target: number) => void;
@@ -49,6 +51,7 @@ const initialState = {
   bankAccountBalance: 10_000,
   dailyTarget: 50,
   bankDepositAmount: 500,
+  investedAmount: 0,
   transactions: [] as Transaction[],
   streak: 0,
   tier: "bronze" as Tier,
@@ -82,6 +85,29 @@ export const usePiggyStore = create<PiggyState>()(
           bankAccountBalance: get().bankAccountBalance + get().balance,
           balance: 0,
           tier: getTier(0),
+        });
+      },
+
+      investToMarket: () => {
+        const total = get().balance + get().bankAccountBalance;
+        const investAmount = total * 0.1;
+        
+        let remainingToDeduct = investAmount;
+        let newBalance = get().balance;
+        let newBankBalance = get().bankAccountBalance;
+
+        if (newBankBalance >= remainingToDeduct) {
+          newBankBalance -= remainingToDeduct;
+        } else {
+          remainingToDeduct -= newBankBalance;
+          newBankBalance = 0;
+          newBalance -= remainingToDeduct;
+        }
+
+        set({
+          balance: newBalance,
+          bankAccountBalance: newBankBalance,
+          investedAmount: get().investedAmount + investAmount,
         });
       },
 

@@ -125,16 +125,17 @@ function BlueBirdMascot() {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function InvestPage() {
-  const { balance, setBalance } = usePiggyStore();
-  const [invested, setInvested] = useState(false);
-  const [investAmount, setInvestAmount] = useState(0);
+  const { balance, bankAccountBalance, investedAmount, investToMarket } = usePiggyStore();
+  
+  const totalSavings = balance + bankAccountBalance;
+  const isInvested = investedAmount > 0;
+  
+  // Show actual invested amount if invested, else preview 10% of current total
+  const displayAmount = isInvested ? investedAmount : totalSavings * 0.1;
 
   const handleInvest = () => {
-    if (invested) return;
-    const amount = balance || 7403;
-    setInvestAmount(amount);
-    setBalance(0);       // zero out the piggy balance
-    setInvested(true);
+    if (isInvested) return;
+    investToMarket();
   };
 
   return (
@@ -145,9 +146,9 @@ export default function InvestPage() {
         <div className="mb-6">
           <h1 className="text-2xl font-extrabold text-gray-800">💹 เงินของคุณทำงานได้!</h1>
           <p className="text-sm text-gray-500 mt-1">
-            {invested
+            {isInvested
               ? "ยินดีด้วย! เงินของคุณกำลังทำงานอยู่แล้ว 🎉"
-              : `ออมได้ ฿${(balance || 7403).toLocaleString("th-TH")} แล้ว ลองดูว่าถ้าเอาไปลงทุนจะได้เท่าไหร่`}
+              : `ออมได้ ฿${totalSavings.toLocaleString("th-TH")} แล้ว แบ่ง 10% มาลงทุนดีไหม?`}
           </p>
         </div>
 
@@ -164,16 +165,16 @@ export default function InvestPage() {
           </div>
           <button
             onClick={handleInvest}
-            disabled={invested}
-            className={`w-full py-3.5 rounded-2xl font-bold text-base transition-colors ${invested
+            disabled={isInvested}
+            className={`w-full py-3.5 rounded-2xl font-bold text-base transition-colors ${isInvested
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-kt-blue text-white hover:bg-kt-blue-dark"
               }`}
           >
-            {invested ? "✅ ลงทุนแล้ว" : "🏦 ไปสาขากรุงไทยใกล้บ้าน"}
+            {isInvested ? "✅ ลงทุนแล้ว" : `🏦 เริ่มลงทุน ฿${displayAmount.toLocaleString("th-TH")}`}
           </button>
           <p className="text-center text-xs text-gray-400 mt-2">
-            {invested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
+            {isInvested ? "ดูพอร์ตการลงทุนของคุณด้านล่าง" : "หรือเปิดผ่านแอป Krungthai NEXT ได้เลย"}
           </p>
         </div>
 
@@ -181,19 +182,19 @@ export default function InvestPage() {
         <div className="bg-kt-blue rounded-3xl p-5 mb-6 shadow-lg">
           <p className="text-white/70 text-sm mb-1">จำนวนเงินลงทุน</p>
           <motion.p
-            key={investAmount}
+            key={displayAmount}
             className="text-4xl font-extrabold text-white"
             initial={{ scale: 1.08 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            ฿{investAmount.toLocaleString("th-TH")}
+            ฿{displayAmount.toLocaleString("th-TH")}
           </motion.p>
         </div>
 
         {/* ─── Post-invest: Donut Chart OR Mascot ──────────────────────── */}
         <AnimatePresence mode="wait">
-          {invested ? (
+          {isInvested ? (
             <motion.div
               key="chart"
               className="bg-white rounded-3xl shadow-sm border border-gray-100 p-6 mb-4"
@@ -204,7 +205,7 @@ export default function InvestPage() {
             >
               <p className="font-bold text-gray-800 text-base mb-1">พอร์ตการลงทุนของคุณ</p>
               <p className="text-xs text-gray-400 mb-5">การกระจายแบบผสมผสานสำหรับผลตอบแทนระยะยาว</p>
-              <DonutChart amount={investAmount} />
+              <DonutChart amount={displayAmount} />
               <p className="text-xs text-gray-400 text-center mt-5 leading-relaxed">
                 ⚠️ ผลตอบแทนที่แสดงเป็นค่าเฉลี่ยจากอดีต ไม่ใช่การรับประกัน
               </p>
