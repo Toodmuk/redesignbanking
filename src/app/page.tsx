@@ -449,7 +449,7 @@ export default function Dashboard() {
               <p className="text-[11px] text-gray-400 font-medium mt-0.5">รวม ฿10,000 กับบัญชีกรุงไทย</p>
             </div>
           </div>
-          <p className="text-xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
+          <p className="text-2xl font-extrabold text-kt-blue">฿{(10000 + balance).toLocaleString("th-TH")}</p>
         </motion.div>
 
         {/* Stats Row */}
