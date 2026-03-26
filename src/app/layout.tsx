@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "กระปุกออมสิน Smart — Krungthai",
-  description: "กระปุกออมสิน Smart ที่เชื่อมกับแอปมือถือของกรุงไทย",
+  title: "กรุ๊งกริ๊ง by กรุงไทย",
+  description: "กรุ๊งกริ๊ง by กรุงไทย ที่เชื่อมกับแอปมือถือของกรุงไทย",
   appleWebApp: {
     capable: true,
-    title: "Krungthai Smart",
+    title: "กรุ๊งกริ๊ง",
     statusBarStyle: "default",
   },
   icons: {
