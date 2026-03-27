@@ -292,7 +292,7 @@ export default function Dashboard() {
     balance: number;
     depositAmount: number;
   } | null>(null);
-  const [showInvestAd, setShowInvestAd] = useState(true);
+  const [showInvestAd, setShowInvestAd] = useState(false);
 
   // Open settings with 1 tap
   const handleLogoTap = useCallback(() => {
@@ -373,6 +373,7 @@ export default function Dashboard() {
                     setShowBankActionBtn(false);
                     setTimeout(() => setToast("✅ ฝากธนาคารเรียบร้อย! กระปุกพร้อมออมใหม่ 🎉"), 300);
                     setTimeout(() => setToast(null), 3000);
+                    setTimeout(() => setShowInvestAd(true), 5000);
                   }}
                   className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-2xl shadow-lg border-2 border-orange-200 active:scale-90 transition-transform"
                   initial={{ scale: 0, opacity: 0 }}
