@@ -434,8 +434,8 @@ export default function Dashboard() {
             initial={{ scale: 1.08 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", stiffness: 400 }}
-            onClick={() => handleDeposit(20)}
-            title="แตะเพื่อหยอด ฿20"
+            onClick={() => handleDeposit(50)}
+            title="แตะเพื่อหยอด ฿50"
           >
             ฿{formatBaht(balance)}
           </motion.p>
