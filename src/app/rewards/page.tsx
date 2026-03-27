@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import BottomNav from "@/components/BottomNav";
 
@@ -67,8 +67,31 @@ function VideoClip({
   onLike: () => void;
   onSave: () => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const video = videoRef.current;
+    if (!container || !video) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().then(() => setPlaying(true)).catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+          setPlaying(false);
+        }
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
 
   const togglePlay = () => {
     const v = videoRef.current;
@@ -79,6 +102,7 @@ function VideoClip({
 
   return (
     <div
+      ref={containerRef}
       className="relative w-full flex-shrink-0"
       style={{ height: "100dvh", scrollSnapAlign: "start" }}
     >
@@ -87,7 +111,6 @@ function VideoClip({
         ref={videoRef}
         src={clip.src}
         className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
         loop
         playsInline
         onClick={togglePlay}
